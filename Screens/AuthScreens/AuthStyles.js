@@ -36,7 +36,7 @@ export const authStyles = StyleSheet.create({
   },
   title: {
     fontSize: 30,
-    fontWeight: 500,
+    fontWeight: "500",
     textAlign: "center",
     marginBottom: 32,
   },
