@@ -41,7 +41,7 @@ const initialFocusState = {
   password: false,
 };
 
-export const RegistrationScreen = () => {
+export const RegistrationScreen = ({ navigation }) => {
   const [isKeyboardShow, setIsKeyboardShow] = useState(false);
   const [onFocus, setOnFocus] = useState(initialFocusState);
   const [formState, setFormState] = useState(initialFormState);
@@ -159,7 +159,11 @@ export const RegistrationScreen = () => {
                   >
                     <Text style={btnText}>Зарегистрироваться</Text>
                   </TouchableOpacity>
-                  <TouchableOpacity style={link} activeOpacity={0.7}>
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate("Login")}
+                    style={link}
+                    activeOpacity={0.7}
+                  >
                     <Text style={linkText}>Уже есть аккаунт? Войти</Text>
                   </TouchableOpacity>
                 </View>
