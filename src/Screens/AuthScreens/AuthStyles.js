@@ -24,7 +24,7 @@ export const authStyles = StyleSheet.create({
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
   },
-  imgWrap: {
+  avatarWrap: {
     position: "absolute",
     display: "flex",
     top: -60,
@@ -66,17 +66,6 @@ export const authStyles = StyleSheet.create({
   showBtnText: {
     fontSize: 16,
     color: "#1B4371",
-  },
-  btn: {
-    marginTop: 43,
-    backgroundColor: "#FF6C00",
-    borderRadius: 32,
-  },
-  btnText: {
-    padding: 16,
-    fontSize: 16,
-    textAlign: "center",
-    color: "#fff",
   },
   link: {},
   linkText: {

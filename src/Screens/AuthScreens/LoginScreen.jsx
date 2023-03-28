@@ -11,6 +11,8 @@ import {
   Platform,
 } from "react-native";
 import { authStyles } from "./AuthStyles";
+import { SubmitBtn } from "../../Components/SubmitBtn/SubmitBtn";
+import Toast from "react-native-root-toast";
 
 const {
   title,
@@ -59,7 +61,12 @@ export const LoginScreen = ({ navigation }) => {
   };
 
   const handleSubmit = () => {
-    console.log(formState);
+    const { email, password } = formState;
+    if (!email || !password) {
+      Toast.show("Please, fill out the form completely");
+      return;
+    }
+    navigation.navigate("Home");
     setFormState(initialFormState);
   };
 
@@ -67,7 +74,7 @@ export const LoginScreen = ({ navigation }) => {
     <TouchableWithoutFeedback onPress={keyboardHide}>
       <ImageBackground
         style={image}
-        source={require("../../assets/images/photoBG.jpeg")}
+        source={require("../../images/photoBG.jpeg")}
       >
         <KeyboardAvoidingView behavior={Platform.OS == "ios" && "padding"}>
           <TouchableWithoutFeedback onPress={keyboardHide}>
@@ -128,14 +135,8 @@ export const LoginScreen = ({ navigation }) => {
                 </View>
               </View>
               {!isKeyboardShow && (
-                <View>
-                  <TouchableOpacity
-                    style={btn}
-                    activeOpacity={0.7}
-                    onPress={handleSubmit}
-                  >
-                    <Text style={btnText}>Войти</Text>
-                  </TouchableOpacity>
+                <View style={{ marginTop: 43 }}>
+                  <SubmitBtn text="Войти" handleSubmit={handleSubmit} />
                   <TouchableOpacity
                     onPress={() => navigation.navigate("Registration")}
                     style={link}

@@ -12,9 +12,11 @@ import {
   Platform,
 } from "react-native";
 import { authStyles } from "./AuthStyles";
+import { SubmitBtn } from "../../Components/SubmitBtn/SubmitBtn";
+import Toast from "react-native-root-toast";
 
 const {
-  imgWrap,
+  avatarWrap,
   title,
   inputWrap,
   input,
@@ -63,7 +65,12 @@ export const RegistrationScreen = ({ navigation }) => {
   };
 
   const handleSubmit = () => {
-    console.log(formState);
+    const { email, password } = formState;
+    if (!email || !password) {
+      Toast.show("Please, fill out the form completely");
+      return;
+    }
+    navigation.navigate("Home");
     setFormState(initialFormState);
   };
 
@@ -71,7 +78,7 @@ export const RegistrationScreen = ({ navigation }) => {
     <TouchableWithoutFeedback onPress={keyboardHide}>
       <ImageBackground
         style={image}
-        source={require("../../assets/images/photoBG.jpeg")}
+        source={require("../../images/photoBG.jpeg")}
       >
         <KeyboardAvoidingView behavior={Platform.OS == "ios" && "padding"}>
           <TouchableWithoutFeedback onPress={keyboardHide}>
@@ -82,7 +89,7 @@ export const RegistrationScreen = ({ navigation }) => {
                 paddingBottom: isKeyboardShow ? 32 : 78,
               }}
             >
-              <View style={imgWrap}>
+              <View style={avatarWrap}>
                 <Image />
               </View>
               <Text style={title}>Регистрация</Text>
@@ -151,14 +158,11 @@ export const RegistrationScreen = ({ navigation }) => {
                 </View>
               </View>
               {!isKeyboardShow && (
-                <View>
-                  <TouchableOpacity
-                    style={btn}
-                    activeOpacity={0.7}
-                    onPress={handleSubmit}
-                  >
-                    <Text style={btnText}>Зарегистрироваться</Text>
-                  </TouchableOpacity>
+                <View style={{ marginTop: 43 }}>
+                  <SubmitBtn
+                    text="Зарегистрироваться"
+                    handleSubmit={handleSubmit}
+                  />
                   <TouchableOpacity
                     onPress={() => navigation.navigate("Login")}
                     style={link}
