@@ -16,9 +16,10 @@ import { Header } from "../../Components/Header/Header";
 import { SubmitBtn } from "../../Components/SubmitBtn/SubmitBtn";
 import Toast from "react-native-root-toast";
 import { mainStyles } from "./MainStyles";
-import { useNavigation } from "@react-navigation/native";
+// import { useNavigation } from "@react-navigation/native";
 
 const {
+  screenWrap,
   main,
   photoWrap,
   cameraBtn,
@@ -73,12 +74,8 @@ export const CreatePostScreen = () => {
 
   return (
     <TouchableWithoutFeedback onPress={keyboardHide}>
-      <KeyboardAvoidingView
-        behavior={Platform.OS == "ios" ? "padding" : "height"}
-      >
-        <View
-          style={{ backgroundColor: "#FFF", height: "100%", display: "flex" }}
-        >
+      <KeyboardAvoidingView behavior={Platform.OS == "ios" && "padding"}>
+        <View style={screenWrap}>
           <Header title="Создать публикацию" />
           <ScrollView>
             <View style={main}>
@@ -108,7 +105,7 @@ export const CreatePostScreen = () => {
                     }))
                   }
                 />
-                <View style={{ createLocationWrap }}>
+                <View style={createLocationWrap}>
                   <TextInput
                     style={{
                       ...createInput,

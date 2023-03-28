@@ -11,6 +11,12 @@ export const mainStyles = StyleSheet.create({
     resizeMode: "cover",
     justifyContent: "flex-end",
   },
+  screenWrap: {
+    backgroundColor: "#FFF",
+    height: "100%",
+    display: "flex",
+    paddingBottom: 8,
+  },
   main: {
     flex: 1,
     rowGap: 32,
@@ -99,10 +105,11 @@ export const mainStyles = StyleSheet.create({
   },
   createLocationWrap: {
     position: "relative",
+    display: "flex",
+    justifyContent: "center",
   },
   createInputIcon: {
     position: "absolute",
-    top: 15,
     height: 25,
   },
   trashWrap: {
