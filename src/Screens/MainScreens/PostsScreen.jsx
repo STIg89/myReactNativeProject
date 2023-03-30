@@ -1,18 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Feather, EvilIcons } from "@expo/vector-icons";
-import {
-  Text,
-  TextInput,
-  View,
-  TouchableOpacity,
-  ImageBackground,
-  Keyboard,
-  TouchableWithoutFeedback,
-  KeyboardAvoidingView,
-  Platform,
-  Image,
-  FlatList,
-} from "react-native";
+import { Text, View, TouchableOpacity, Image, FlatList } from "react-native";
 import { Header } from "../../Components/Header/Header";
 import { mainStyles } from "./MainStyles";
 
