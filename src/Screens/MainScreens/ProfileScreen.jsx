@@ -1,16 +1,5 @@
 import React from "react";
-import {
-  Text,
-  TextInput,
-  View,
-  TouchableOpacity,
-  ImageBackground,
-  Keyboard,
-  TouchableWithoutFeedback,
-  KeyboardAvoidingView,
-  Platform,
-  Image,
-} from "react-native";
+import { Text, View, ImageBackground, Image } from "react-native";
 import { mainStyles } from "./MainStyles";
 const { background, avatarWrap, title, profileWrapper } = mainStyles;
 

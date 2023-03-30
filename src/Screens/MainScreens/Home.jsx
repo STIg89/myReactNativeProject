@@ -1,15 +1,11 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { View } from "react-native";
 import AntDesign from "@expo/vector-icons/AntDesign";
-import { mainStyles } from "./MainStyles";
-const { bottomBtn } = mainStyles;
-
-const MainTab = createBottomTabNavigator();
-
 import { PostsScreen } from "./PostsScreen";
 import { ProfileScreen } from "./ProfileScreen";
 import { CreatePostScreen } from "./CreatePostScreen";
+
+const MainTab = createBottomTabNavigator();
 
 export const Home = () => {
   return (

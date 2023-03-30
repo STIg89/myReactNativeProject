@@ -89,8 +89,8 @@ export const mainStyles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#FFF",
+    opacity: 0.3,
     borderRadius: 30,
-    position: "absolute",
   },
   photoText: {
     fontSize: 16,
@@ -124,5 +124,11 @@ export const mainStyles = StyleSheet.create({
     height: 40,
     borderRadius: 20,
     backgroundColor: "#F6F6F6",
+  },
+  photoDetailsEl: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
   },
 });

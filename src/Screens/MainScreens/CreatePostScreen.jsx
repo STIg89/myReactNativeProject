@@ -1,5 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { AntDesign, EvilIcons, FontAwesome } from "@expo/vector-icons";
+import { Camera } from "expo-camera";
+import * as MediaLibrary from "expo-media-library";
+import * as Location from "expo-location";
 import {
   Text,
   TextInput,
@@ -16,7 +19,6 @@ import { Header } from "../../Components/Header/Header";
 import { SubmitBtn } from "../../Components/SubmitBtn/SubmitBtn";
 import Toast from "react-native-root-toast";
 import { mainStyles } from "./MainStyles";
-// import { useNavigation } from "@react-navigation/native";
 
 const {
   screenWrap,
@@ -33,19 +35,48 @@ const {
 
 const initialFormState = {
   name: "",
-  location: "",
+  locationDescription: "",
 };
 
 const initialFocusState = {
   name: false,
-  location: false,
+  locationDescription: false,
 };
 
-export const CreatePostScreen = () => {
+// const initialLocation = {
+//   latitude: null,
+//   longitude: null,
+// };
+
+export const CreatePostScreen = ({ navigation }) => {
   const [isKeyboardShow, setIsKeyboardShow] = useState(false);
   const [onFocus, setOnFocus] = useState(initialFocusState);
   const [formState, setFormState] = useState(initialFormState);
-  // const navigation = useNavigation();
+  const [camera, setCamera] = useState(null);
+  const [photo, setPhoto] = useState(null);
+  const [location, setLocation] = useState(null);
+
+  useEffect(() => {
+    (async () => {
+      await Camera.requestCameraPermissionsAsync();
+      await MediaLibrary.requestPermissionsAsync();
+      await Location.requestForegroundPermissionsAsync();
+    })();
+  }, []);
+
+  useEffect(() => {
+    async () => {};
+  }, [photo]);
+
+  const takePhoto = async () => {
+    const { uri } = await camera.takePictureAsync();
+    setPhoto(uri);
+    const location = await Location.getCurrentPositionAsync();
+    setLocation({
+      latitude: location.coords.latitude,
+      longitude: location.coords.longitude,
+    });
+  };
 
   const keyboardHide = () => {
     setIsKeyboardShow(false);
@@ -62,14 +93,24 @@ export const CreatePostScreen = () => {
     setIsKeyboardShow(false);
   };
 
-  const handleSubmit = () => {
-    const { name, location } = formState;
-    if (!name || !location) {
+  const handleSubmit = async () => {
+    const { name, locationDescription } = formState;
+    const { latitude, longitude } = location;
+
+    if (!name || !locationDescription || !photo) {
       Toast.show("Please, fill out the form completely");
       return;
     }
-    // navigation.navigate("Home");
+
+    navigation.navigate("Posts", {
+      photo,
+      name,
+      locationDescription,
+      latitude,
+      longitude,
+    });
     setFormState(initialFormState);
+    setPhoto(null);
   };
 
   return (
@@ -80,13 +121,29 @@ export const CreatePostScreen = () => {
           <ScrollView>
             <View style={main}>
               <View>
-                <View style={photoWrap}>
-                  <Image />
-                  <TouchableOpacity style={cameraBtn}>
-                    <AntDesign name="camera" size={24} color="#BDBDBD" />
-                  </TouchableOpacity>
+                <View>
+                  {!photo && (
+                    <Camera style={photoWrap} ref={setCamera}>
+                      <TouchableOpacity
+                        style={cameraBtn}
+                        onPress={() => {
+                          takePhoto();
+                        }}
+                      >
+                        <AntDesign name="camera" size={24} color="#BDBDBD" />
+                      </TouchableOpacity>
+                    </Camera>
+                  )}
+                  {photo && (
+                    <TouchableOpacity onPress={() => setPhoto(null)}>
+                      <Image source={{ uri: photo }} style={photoWrap} />
+                    </TouchableOpacity>
+                  )}
                 </View>
-                <Text style={photoText}>Загрузите фото</Text>
+                {!photo && <Text style={photoText}>Сделайте фото</Text>}
+                {photo && (
+                  <Text style={photoText}>Нажми на фото, для удаления</Text>
+                )}
               </View>
               <View style={{ gap: 16 }}>
                 <TextInput
@@ -98,6 +155,7 @@ export const CreatePostScreen = () => {
                   placeholderTextColor={"#BDBDBD"}
                   onFocus={() => handleFocus("name")}
                   onEndEditing={() => outFocus("name")}
+                  value={formState.name}
                   onChangeText={(value) =>
                     setFormState((prevState) => ({
                       ...prevState,
@@ -116,12 +174,13 @@ export const CreatePostScreen = () => {
                     }}
                     placeholder="Местность..."
                     placeholderTextColor={"#BDBDBD"}
-                    onFocus={() => handleFocus("location")}
-                    onEndEditing={() => outFocus("location")}
+                    onFocus={() => handleFocus("locationDescription")}
+                    onEndEditing={() => outFocus("locationDescription")}
+                    value={formState.locationDescription}
                     onChangeText={(value) =>
                       setFormState((prevState) => ({
                         ...prevState,
-                        location: value,
+                        locationDescription: value,
                       }))
                     }
                   />
@@ -142,7 +201,13 @@ export const CreatePostScreen = () => {
           </ScrollView>
           <View style={trashWrap}>
             {!isKeyboardShow && (
-              <TouchableOpacity style={trashBtn}>
+              <TouchableOpacity
+                style={trashBtn}
+                onPress={() => {
+                  setFormState(initialFormState);
+                  setPhoto(null);
+                }}
+              >
                 <FontAwesome name="trash-o" size={24} color="#BDBDBD" />
               </TouchableOpacity>
             )}

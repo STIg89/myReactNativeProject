@@ -4,33 +4,47 @@ import { RootSiblingParent } from "react-native-root-siblings";
 
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-const AuthStack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator();
+// const MainStack = createNativeStackNavigator();
+// const AdditionalStack = createNativeStackNavigator();
 
 import { RegistrationScreen } from "./src/Screens/AuthScreens/RegistrationScreen";
 import { LoginScreen } from "./src/Screens/AuthScreens/LoginScreen";
 import { Home } from "./src/Screens/MainScreens/Home";
+import { MapScreen } from "./src/Screens/AdditionalScreens/MapScreen";
+import { CommentsScreen } from "./src/Screens/AdditionalScreens/CommentsScreen";
 
 export default function App() {
   return (
     <RootSiblingParent>
       <NavigationContainer>
-        <AuthStack.Navigator>
-          <AuthStack.Screen
+        <Stack.Navigator>
+          <Stack.Screen
             options={{ headerShown: false }}
             name="Registration"
             component={RegistrationScreen}
           />
-          <AuthStack.Screen
+          <Stack.Screen
             options={{ headerShown: false }}
             name="Login"
             component={LoginScreen}
           />
-          <AuthStack.Screen
+          <Stack.Screen
             options={{ headerShown: false }}
             name="Home"
             component={Home}
           />
-        </AuthStack.Navigator>
+          <Stack.Screen
+            options={{ headerShown: false }}
+            name="Map"
+            component={MapScreen}
+          />
+          <Stack.Screen
+            options={{ headerShown: false }}
+            name="Comments"
+            component={CommentsScreen}
+          />
+        </Stack.Navigator>
       </NavigationContainer>
     </RootSiblingParent>
   );

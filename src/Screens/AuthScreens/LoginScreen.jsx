@@ -97,6 +97,7 @@ export const LoginScreen = ({ navigation }) => {
                   keyboardType="email-address"
                   onFocus={() => handleFocus("email")}
                   onEndEditing={() => outFocus("email")}
+                  value={formState.email}
                   onChangeText={(value) =>
                     setFormState((prevState) => ({
                       ...prevState,
@@ -115,6 +116,7 @@ export const LoginScreen = ({ navigation }) => {
                     placeholderTextColor="#BDBDBD"
                     onFocus={() => handleFocus("password")}
                     onEndEditing={() => outFocus("password")}
+                    value={formState.password}
                     onChangeText={(value) =>
                       setFormState((prevState) => ({
                         ...prevState,
