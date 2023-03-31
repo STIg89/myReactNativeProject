@@ -3,14 +3,14 @@ import { StyleSheet } from "react-native";
 export const headerStyles = StyleSheet.create({
   header: {
     display: "flex",
-    paddingTop: 55,
+    paddingTop: "13%",
     width: "100%",
     justifyContent: "center",
     flexDirection: "row",
     justifyContent: "center",
     borderBottomColor: "#BDBDBD",
     borderBottomWidth: 1,
-    paddingBottom: 11,
+    paddingBottom: "2%",
     backgroundColor: "#FFF",
   },
   headerTitle: {
@@ -20,11 +20,11 @@ export const headerStyles = StyleSheet.create({
   backBtn: {
     position: "absolute",
     left: 10,
-    top: 55,
+    bottom: "25%",
   },
   logOutBtn: {
     position: "absolute",
     right: 10,
-    top: 55,
+    bottom: "25%",
   },
 });

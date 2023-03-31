@@ -19,10 +19,10 @@ export const mainStyles = StyleSheet.create({
   },
   main: {
     flex: 1,
-    rowGap: 32,
+    rowGap: 28,
     justifyContent: "flex-start",
-    paddingHorizontal: 16,
-    paddingVertical: 32,
+    paddingHorizontal: "4%",
+    paddingVertical: "7%",
     backgroundColor: "#FFF",
   },
   avatarWrap: {
@@ -66,8 +66,8 @@ export const mainStyles = StyleSheet.create({
   profileWrapper: {
     position: "relative",
     alignItems: "stretch",
-    paddingHorizontal: 16,
-    paddingTop: 92,
+    paddingHorizontal: "4%",
+    paddingTop: "20%",
     backgroundColor: "#fff",
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,

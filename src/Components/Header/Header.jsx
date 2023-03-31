@@ -1,15 +1,5 @@
 import React from "react";
-import {
-  Text,
-  TextInput,
-  View,
-  TouchableOpacity,
-  ImageBackground,
-  Keyboard,
-  TouchableWithoutFeedback,
-  KeyboardAvoidingView,
-  Platform,
-} from "react-native";
+import { Text, View, TouchableOpacity } from "react-native";
 import { AntDesign, MaterialIcons } from "@expo/vector-icons";
 import { headerStyles } from "./HeaderStyles";
 import { useNavigation } from "@react-navigation/native";
