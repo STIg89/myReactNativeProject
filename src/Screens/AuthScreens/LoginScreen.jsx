@@ -11,18 +11,15 @@ import {
   Platform,
 } from "react-native";
 import { authStyles } from "./AuthStyles";
-import { SubmitBtn } from "../../Components/SubmitBtn/SubmitBtn";
+import { SubmitBtn } from "../../components/SubmitBtn/SubmitBtn";
 import Toast from "react-native-root-toast";
 
 const {
   title,
-  inputWrap,
   input,
   passwordWrap,
   showBtn,
   showBtnText,
-  btn,
-  btnText,
   link,
   linkText,
   image,
@@ -86,58 +83,54 @@ export const LoginScreen = ({ navigation }) => {
               }}
             >
               <Text style={title}>Войти</Text>
-              <View style={inputWrap}>
+              <TextInput
+                style={{
+                  ...input,
+                  borderColor: onFocus.email ? "#FF6C00" : "#E8E8E8",
+                }}
+                placeholder="Адрес электронной почты"
+                placeholderTextColor="#BDBDBD"
+                keyboardType="email-address"
+                onFocus={() => handleFocus("email")}
+                onEndEditing={() => outFocus("email")}
+                value={formState.email}
+                onChangeText={(value) =>
+                  setFormState((prevState) => ({
+                    ...prevState,
+                    email: value,
+                  }))
+                }
+              />
+              <View style={passwordWrap}>
                 <TextInput
                   style={{
                     ...input,
-                    borderColor: onFocus.email ? "#FF6C00" : "#E8E8E8",
+                    borderColor: onFocus.password ? "#FF6C00" : "#E8E8E8",
                   }}
-                  placeholder="Адрес электронной почты"
+                  secureTextEntry={isPasswordHidden}
+                  placeholder="Пароль"
                   placeholderTextColor="#BDBDBD"
-                  keyboardType="email-address"
-                  onFocus={() => handleFocus("email")}
-                  onEndEditing={() => outFocus("email")}
-                  value={formState.email}
+                  onFocus={() => handleFocus("password")}
+                  onEndEditing={() => outFocus("password")}
+                  value={formState.password}
                   onChangeText={(value) =>
                     setFormState((prevState) => ({
                       ...prevState,
-                      email: value,
+                      password: value,
                     }))
                   }
                 />
-                <View style={passwordWrap}>
-                  <TextInput
-                    style={{
-                      ...input,
-                      borderColor: onFocus.password ? "#FF6C00" : "#E8E8E8",
-                    }}
-                    secureTextEntry={isPasswordHidden}
-                    placeholder="Пароль"
-                    placeholderTextColor="#BDBDBD"
-                    onFocus={() => handleFocus("password")}
-                    onEndEditing={() => outFocus("password")}
-                    value={formState.password}
-                    onChangeText={(value) =>
-                      setFormState((prevState) => ({
-                        ...prevState,
-                        password: value,
-                      }))
-                    }
-                  />
-                  <TouchableOpacity
-                    style={showBtn}
-                    onPress={() =>
-                      setIsPasswordHidden((prevState) => !prevState)
-                    }
-                  >
-                    <Text style={showBtnText}>
-                      {isPasswordHidden ? "Показать" : "Скрыть"}
-                    </Text>
-                  </TouchableOpacity>
-                </View>
+                <TouchableOpacity
+                  style={showBtn}
+                  onPress={() => setIsPasswordHidden((prevState) => !prevState)}
+                >
+                  <Text style={showBtnText}>
+                    {isPasswordHidden ? "Показать" : "Скрыть"}
+                  </Text>
+                </TouchableOpacity>
               </View>
               {!isKeyboardShow && (
-                <View style={{ marginTop: 43 }}>
+                <View style={{ marginTop: 27 }}>
                   <SubmitBtn text="Войти" handleSubmit={handleSubmit} />
                   <TouchableOpacity
                     onPress={() => navigation.navigate("Registration")}

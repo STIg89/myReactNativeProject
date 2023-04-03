@@ -1,5 +1,5 @@
 import React from "react";
-import { Header } from "../../Components/Header/Header";
+import { Header } from "../../components/Header/Header";
 import MapView, { Marker } from "react-native-maps";
 import { StyleSheet, View } from "react-native";
 

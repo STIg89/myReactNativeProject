@@ -40,15 +40,13 @@ export const authStyles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 32,
   },
-  inputWrap: {
-    gap: 16,
-  },
   input: {
     padding: 16,
     fontSize: 16,
     backgroundColor: "#F6F6F6",
     borderWidth: 1,
     borderRadius: 8,
+    marginBottom: 16,
   },
   passwordWrap: {
     position: "relative",

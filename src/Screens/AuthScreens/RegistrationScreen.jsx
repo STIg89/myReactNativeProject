@@ -12,19 +12,16 @@ import {
   Platform,
 } from "react-native";
 import { authStyles } from "./AuthStyles";
-import { SubmitBtn } from "../../Components/SubmitBtn/SubmitBtn";
+import { SubmitBtn } from "../../components/SubmitBtn/SubmitBtn";
 import Toast from "react-native-root-toast";
 
 const {
   avatarWrap,
   title,
-  inputWrap,
   input,
   passwordWrap,
   showBtn,
   showBtnText,
-  btn,
-  btnText,
   link,
   linkText,
   image,
@@ -71,6 +68,7 @@ export const RegistrationScreen = ({ navigation }) => {
       return;
     }
     navigation.navigate("Home");
+    console.log(formState);
     setFormState(initialFormState);
   };
 
@@ -93,75 +91,71 @@ export const RegistrationScreen = ({ navigation }) => {
                 <Image />
               </View>
               <Text style={title}>Регистрация</Text>
-              <View style={inputWrap}>
+              <TextInput
+                style={{
+                  ...input,
+                  borderColor: onFocus.login ? "#FF6C00" : "#E8E8E8",
+                }}
+                placeholder="Логин"
+                placeholderTextColor="#BDBDBD"
+                onFocus={() => handleFocus("login")}
+                onEndEditing={() => outFocus("login")}
+                value={formState.login}
+                onChangeText={(value) =>
+                  setFormState((prevState) => ({
+                    ...prevState,
+                    login: value,
+                  }))
+                }
+              />
+              <TextInput
+                style={{
+                  ...input,
+                  borderColor: onFocus.email ? "#FF6C00" : "#E8E8E8",
+                }}
+                placeholder="Адрес электронной почты"
+                placeholderTextColor="#BDBDBD"
+                keyboardType="email-address"
+                onFocus={() => handleFocus("email")}
+                onEndEditing={() => outFocus("email")}
+                value={formState.email}
+                onChangeText={(value) =>
+                  setFormState((prevState) => ({
+                    ...prevState,
+                    email: value,
+                  }))
+                }
+              />
+              <View style={passwordWrap}>
                 <TextInput
                   style={{
                     ...input,
-                    borderColor: onFocus.login ? "#FF6C00" : "#E8E8E8",
+                    borderColor: onFocus.password ? "#FF6C00" : "#E8E8E8",
                   }}
-                  placeholder="Логин"
+                  secureTextEntry={isPasswordHidden}
+                  placeholder="Пароль"
                   placeholderTextColor="#BDBDBD"
-                  onFocus={() => handleFocus("login")}
-                  onEndEditing={() => outFocus("login")}
-                  value={formState.login}
+                  onFocus={() => handleFocus("password")}
+                  onEndEditing={() => outFocus("password")}
+                  value={formState.password}
                   onChangeText={(value) =>
                     setFormState((prevState) => ({
                       ...prevState,
-                      login: value,
+                      password: value,
                     }))
                   }
                 />
-                <TextInput
-                  style={{
-                    ...input,
-                    borderColor: onFocus.email ? "#FF6C00" : "#E8E8E8",
-                  }}
-                  placeholder="Адрес электронной почты"
-                  placeholderTextColor="#BDBDBD"
-                  keyboardType="email-address"
-                  onFocus={() => handleFocus("email")}
-                  onEndEditing={() => outFocus("email")}
-                  value={formState.email}
-                  onChangeText={(value) =>
-                    setFormState((prevState) => ({
-                      ...prevState,
-                      email: value,
-                    }))
-                  }
-                />
-                <View style={passwordWrap}>
-                  <TextInput
-                    style={{
-                      ...input,
-                      borderColor: onFocus.password ? "#FF6C00" : "#E8E8E8",
-                    }}
-                    secureTextEntry={isPasswordHidden}
-                    placeholder="Пароль"
-                    placeholderTextColor="#BDBDBD"
-                    onFocus={() => handleFocus("password")}
-                    onEndEditing={() => outFocus("password")}
-                    value={formState.password}
-                    onChangeText={(value) =>
-                      setFormState((prevState) => ({
-                        ...prevState,
-                        password: value,
-                      }))
-                    }
-                  />
-                  <TouchableOpacity
-                    style={showBtn}
-                    onPress={() =>
-                      setIsPasswordHidden((prevState) => !prevState)
-                    }
-                  >
-                    <Text style={showBtnText}>
-                      {isPasswordHidden ? "Показать" : "Скрыть"}
-                    </Text>
-                  </TouchableOpacity>
-                </View>
+                <TouchableOpacity
+                  style={showBtn}
+                  onPress={() => setIsPasswordHidden((prevState) => !prevState)}
+                >
+                  <Text style={showBtnText}>
+                    {isPasswordHidden ? "Показать" : "Скрыть"}
+                  </Text>
+                </TouchableOpacity>
               </View>
               {!isKeyboardShow && (
-                <View style={{ marginTop: 43 }}>
+                <View style={{ marginTop: 27 }}>
                   <SubmitBtn
                     text="Зарегистрироваться"
                     handleSubmit={handleSubmit}

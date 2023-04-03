@@ -15,8 +15,8 @@ import {
   Image,
   ScrollView,
 } from "react-native";
-import { Header } from "../../Components/Header/Header";
-import { SubmitBtn } from "../../Components/SubmitBtn/SubmitBtn";
+import { Header } from "../../components/Header/Header";
+import { SubmitBtn } from "../../components/SubmitBtn/SubmitBtn";
 import Toast from "react-native-root-toast";
 import { mainStyles } from "./MainStyles";
 
@@ -120,7 +120,7 @@ export const CreatePostScreen = ({ navigation }) => {
           <Header title="Создать публикацию" />
           <ScrollView>
             <View style={main}>
-              <View>
+              <View style={{ marginBottom: 28 }}>
                 <View>
                   {!photo && (
                     <Camera style={photoWrap} ref={setCamera}>
@@ -145,7 +145,7 @@ export const CreatePostScreen = ({ navigation }) => {
                   <Text style={photoText}>Нажми на фото, для удаления</Text>
                 )}
               </View>
-              <View style={{ gap: 16 }}>
+              <View style={{ marginBottom: 16 }}>
                 <TextInput
                   style={{
                     ...createInput,

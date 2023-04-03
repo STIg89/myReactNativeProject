@@ -19,7 +19,6 @@ export const mainStyles = StyleSheet.create({
   },
   main: {
     flex: 1,
-    rowGap: 28,
     justifyContent: "flex-start",
     paddingHorizontal: "4%",
     paddingVertical: "7%",
@@ -41,17 +40,17 @@ export const mainStyles = StyleSheet.create({
     height: 60,
     borderRadius: 16,
     backgroundColor: "#F6F6F6",
+    marginRight: 8,
   },
   userData: {
     display: "flex",
     flexDirection: "row",
-    gap: 8,
     alignItems: "center",
   },
   userInfo: {},
   userLogin: {
     fontSize: 13,
-    fontWeight: 700,
+    fontWeight: "700",
   },
   userMail: {
     fontSize: 11,
@@ -102,6 +101,7 @@ export const mainStyles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "500",
     paddingVertical: 15,
+    marginBottom: 16,
   },
   createLocationWrap: {
     position: "relative",
@@ -129,6 +129,5 @@ export const mainStyles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
-    gap: 6,
   },
 });

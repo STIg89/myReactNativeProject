@@ -15,7 +15,7 @@ export const headerStyles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: 17,
-    fontWeight: 500,
+    fontWeight: "500",
   },
   backBtn: {
     position: "absolute",

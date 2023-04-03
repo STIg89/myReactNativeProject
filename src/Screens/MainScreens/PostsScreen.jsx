@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Feather, EvilIcons } from "@expo/vector-icons";
 import { Text, View, TouchableOpacity, Image, FlatList } from "react-native";
-import { Header } from "../../Components/Header/Header";
+import { Header } from "../../components/Header/Header";
 import { mainStyles } from "./MainStyles";
 
 const {
@@ -44,7 +44,7 @@ export const PostsScreen = ({ route, navigation }) => {
             <View style={{ marginBottom: 32 }}>
               <Image source={{ uri: item.photo }} style={photoWrap} />
               <Text
-                style={{ fontSize: 16, marginVertical: 8, fontWeight: 500 }}
+                style={{ fontSize: 16, marginVertical: 8, fontWeight: "500" }}
               >
                 {item.name}
               </Text>
@@ -62,7 +62,11 @@ export const PostsScreen = ({ route, navigation }) => {
                   style={photoDetailsEl}
                 >
                   <Feather name="message-square" size={24} color="#BDBDBD" />
-                  <Text style={{ fontSize: 16, color: "#BDBDBD" }}>0</Text>
+                  <Text
+                    style={{ fontSize: 16, color: "#BDBDBD", marginLeft: 6 }}
+                  >
+                    0
+                  </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => {
@@ -71,7 +75,7 @@ export const PostsScreen = ({ route, navigation }) => {
                   style={photoDetailsEl}
                 >
                   <EvilIcons name="location" size={28} color="#BDBDBD" />
-                  <Text style={{ fontSize: 16 }}>
+                  <Text style={{ fontSize: 16, marginLeft: 4 }}>
                     {item.locationDescription}
                   </Text>
                 </TouchableOpacity>
