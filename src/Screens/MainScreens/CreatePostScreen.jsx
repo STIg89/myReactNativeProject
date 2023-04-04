@@ -43,11 +43,6 @@ const initialFocusState = {
   locationDescription: false,
 };
 
-// const initialLocation = {
-//   latitude: null,
-//   longitude: null,
-// };
-
 export const CreatePostScreen = ({ navigation }) => {
   const [isKeyboardShow, setIsKeyboardShow] = useState(false);
   const [onFocus, setOnFocus] = useState(initialFocusState);

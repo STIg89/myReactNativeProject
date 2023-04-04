@@ -11,9 +11,11 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
+import { useDispatch } from "react-redux";
 import { authStyles } from "./AuthStyles";
 import { SubmitBtn } from "../../components/SubmitBtn/SubmitBtn";
 import Toast from "react-native-root-toast";
+import { authRegistrationUser } from "../../redux/auth/authOperations";
 
 const {
   avatarWrap,
@@ -29,15 +31,15 @@ const {
 } = authStyles;
 
 const initialFormState = {
-  login: "",
-  email: "",
-  password: "",
+  userName: "",
+  userEmail: "",
+  userPassword: "",
 };
 
 const initialFocusState = {
-  login: false,
-  email: false,
-  password: false,
+  userName: false,
+  userEmail: false,
+  userPassword: false,
 };
 
 export const RegistrationScreen = ({ navigation }) => {
@@ -45,6 +47,8 @@ export const RegistrationScreen = ({ navigation }) => {
   const [onFocus, setOnFocus] = useState(initialFocusState);
   const [formState, setFormState] = useState(initialFormState);
   const [isPasswordHidden, setIsPasswordHidden] = useState(true);
+
+  const dispatch = useDispatch();
 
   const keyboardHide = () => {
     setIsKeyboardShow(false);
@@ -62,13 +66,14 @@ export const RegistrationScreen = ({ navigation }) => {
   };
 
   const handleSubmit = () => {
-    const { email, password } = formState;
-    if (!email || !password) {
+    const { userEmail, userPassword } = formState;
+    if (!userEmail || !userPassword) {
       Toast.show("Please, fill out the form completely");
       return;
     }
-    navigation.navigate("Home");
-    console.log(formState);
+    dispatch(authRegistrationUser(formState));
+    // navigation.navigate("Home");
+    // console.log(formState);
     setFormState(initialFormState);
   };
 
@@ -94,35 +99,35 @@ export const RegistrationScreen = ({ navigation }) => {
               <TextInput
                 style={{
                   ...input,
-                  borderColor: onFocus.login ? "#FF6C00" : "#E8E8E8",
+                  borderColor: onFocus.userName ? "#FF6C00" : "#E8E8E8",
                 }}
                 placeholder="Логин"
                 placeholderTextColor="#BDBDBD"
-                onFocus={() => handleFocus("login")}
-                onEndEditing={() => outFocus("login")}
-                value={formState.login}
+                onFocus={() => handleFocus("userName")}
+                onEndEditing={() => outFocus("userName")}
+                value={formState.userName}
                 onChangeText={(value) =>
                   setFormState((prevState) => ({
                     ...prevState,
-                    login: value,
+                    userName: value,
                   }))
                 }
               />
               <TextInput
                 style={{
                   ...input,
-                  borderColor: onFocus.email ? "#FF6C00" : "#E8E8E8",
+                  borderColor: onFocus.userEmail ? "#FF6C00" : "#E8E8E8",
                 }}
                 placeholder="Адрес электронной почты"
                 placeholderTextColor="#BDBDBD"
                 keyboardType="email-address"
-                onFocus={() => handleFocus("email")}
-                onEndEditing={() => outFocus("email")}
-                value={formState.email}
+                onFocus={() => handleFocus("userEmail")}
+                onEndEditing={() => outFocus("userEmail")}
+                value={formState.userEmail}
                 onChangeText={(value) =>
                   setFormState((prevState) => ({
                     ...prevState,
-                    email: value,
+                    userEmail: value,
                   }))
                 }
               />
@@ -130,18 +135,18 @@ export const RegistrationScreen = ({ navigation }) => {
                 <TextInput
                   style={{
                     ...input,
-                    borderColor: onFocus.password ? "#FF6C00" : "#E8E8E8",
+                    borderColor: onFocus.userPassword ? "#FF6C00" : "#E8E8E8",
                   }}
                   secureTextEntry={isPasswordHidden}
                   placeholder="Пароль"
                   placeholderTextColor="#BDBDBD"
-                  onFocus={() => handleFocus("password")}
-                  onEndEditing={() => outFocus("password")}
-                  value={formState.password}
+                  onFocus={() => handleFocus("userPassword")}
+                  onEndEditing={() => outFocus("userPassword")}
+                  value={formState.userPassword}
                   onChangeText={(value) =>
                     setFormState((prevState) => ({
                       ...prevState,
-                      password: value,
+                      userPassword: value,
                     }))
                   }
                 />
