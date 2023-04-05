@@ -19,7 +19,6 @@ const {
 
 export const PostsScreen = ({ route, navigation }) => {
   const [posts, setPosts] = useState([]);
-  // console.log(posts);
 
   const getPosts = () => {
     onSnapshot(collection(db, "posts"), (collection) => {
