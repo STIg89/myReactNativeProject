@@ -19,8 +19,12 @@ import { Header } from "../../components/Header/Header";
 import { SubmitBtn } from "../../components/SubmitBtn/SubmitBtn";
 import Toast from "react-native-root-toast";
 import { mainStyles } from "./MainStyles";
-import { storage } from "../../firebase/config";
+
+import { storage, db } from "../../firebase/config";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { doc, setDoc } from "firebase/firestore";
+import { useSelector } from "react-redux";
+import { selectUserProfile } from "../../redux/auth/authSelectors";
 
 const {
   screenWrap,
@@ -52,23 +56,24 @@ export const CreatePostScreen = ({ navigation }) => {
   const [camera, setCamera] = useState(null);
   const [photo, setPhoto] = useState(null);
   const [location, setLocation] = useState(null);
+  const { userId, userName } = useSelector(selectUserProfile);
 
   useEffect(() => {
     (async () => {
       await Camera.requestCameraPermissionsAsync();
       await MediaLibrary.requestPermissionsAsync();
       await Location.requestForegroundPermissionsAsync();
+      const location = await Location.getCurrentPositionAsync();
+      setLocation({
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+      });
     })();
   }, []);
 
   const takePhoto = async () => {
     const { uri } = await camera.takePictureAsync();
     setPhoto(uri);
-    const location = await Location.getCurrentPositionAsync();
-    setLocation({
-      latitude: location.coords.latitude,
-      longitude: location.coords.longitude,
-    });
   };
 
   const keyboardHide = () => {
@@ -88,33 +93,43 @@ export const CreatePostScreen = ({ navigation }) => {
 
   const handleSubmit = async () => {
     const { name, locationDescription } = formState;
-    const { latitude, longitude } = location;
 
     if (!name || !locationDescription || !photo) {
       Toast.show("Please, fill out the form completely");
       return;
     }
-    uploadToStorage();
 
-    navigation.navigate("Posts", {
-      photo,
-      name,
-      locationDescription,
-      latitude,
-      longitude,
-    });
+    uploadPost();
+    navigation.navigate("Posts");
     setFormState(initialFormState);
     setPhoto(null);
   };
 
-  const uploadToStorage = async () => {
+  const uploadPost = async () => {
+    const { name, locationDescription } = formState;
+    const { latitude, longitude } = location;
+    const photoUrl = await uploadPhoto();
+    const postId = Date.now().toString();
+    const postData = {
+      photoUrl,
+      name,
+      locationDescription,
+      latitude,
+      longitude,
+      userId,
+      userName,
+    };
+    await setDoc(doc(db, "posts", `${postId}`), postData);
+  };
+
+  const uploadPhoto = async () => {
     const resp = await fetch(photo);
     const file = await resp.blob();
     const photoId = Date.now().toString();
     const storageRef = ref(storage, `images/${photoId}`);
     const uploadPhoto = await uploadBytesResumable(storageRef, file);
     const photoRef = await getDownloadURL(uploadPhoto.ref);
-    console.log(photoRef);
+    return photoRef;
   };
 
   return (
@@ -196,9 +211,14 @@ export const CreatePostScreen = ({ navigation }) => {
                   />
                 </View>
               </View>
-              {!isKeyboardShow && (
+              {!isKeyboardShow && location !== null && (
                 <>
                   <SubmitBtn text="Опубликовать" handleSubmit={handleSubmit} />
+                </>
+              )}
+              {location === null && (
+                <>
+                  <SubmitBtn text="Определение координат..." />
                 </>
               )}
             </View>

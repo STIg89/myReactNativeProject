@@ -3,6 +3,8 @@ import { Feather, EvilIcons } from "@expo/vector-icons";
 import { Text, View, TouchableOpacity, Image, FlatList } from "react-native";
 import { Header } from "../../components/Header/Header";
 import { mainStyles } from "./MainStyles";
+import { db } from "../../firebase/config";
+import { doc, onSnapshot, collection } from "firebase/firestore";
 
 const {
   main,
@@ -17,12 +19,17 @@ const {
 
 export const PostsScreen = ({ route, navigation }) => {
   const [posts, setPosts] = useState([]);
+  // console.log(posts);
+
+  const getPosts = () => {
+    onSnapshot(collection(db, "posts"), (collection) => {
+      setPosts(collection.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    });
+  };
 
   useEffect(() => {
-    if (route.params) {
-      setPosts((prevState) => [...prevState, route.params]);
-    }
-  }, [route.params]);
+    getPosts();
+  }, []);
 
   return (
     <>
@@ -39,10 +46,10 @@ export const PostsScreen = ({ route, navigation }) => {
         </View>
         <FlatList
           data={posts}
-          keyExtractor={(item, idx) => idx.toString()}
+          keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
             <View style={{ marginBottom: 32 }}>
-              <Image source={{ uri: item.photo }} style={photoWrap} />
+              <Image source={{ uri: item.photoUrl }} style={photoWrap} />
               <Text
                 style={{ fontSize: 16, marginVertical: 8, fontWeight: "500" }}
               >
