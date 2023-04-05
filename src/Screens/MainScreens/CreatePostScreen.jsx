@@ -19,6 +19,8 @@ import { Header } from "../../components/Header/Header";
 import { SubmitBtn } from "../../components/SubmitBtn/SubmitBtn";
 import Toast from "react-native-root-toast";
 import { mainStyles } from "./MainStyles";
+import { storage } from "../../firebase/config";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 const {
   screenWrap,
@@ -59,10 +61,6 @@ export const CreatePostScreen = ({ navigation }) => {
     })();
   }, []);
 
-  useEffect(() => {
-    async () => {};
-  }, [photo]);
-
   const takePhoto = async () => {
     const { uri } = await camera.takePictureAsync();
     setPhoto(uri);
@@ -96,6 +94,7 @@ export const CreatePostScreen = ({ navigation }) => {
       Toast.show("Please, fill out the form completely");
       return;
     }
+    uploadToStorage();
 
     navigation.navigate("Posts", {
       photo,
@@ -106,6 +105,16 @@ export const CreatePostScreen = ({ navigation }) => {
     });
     setFormState(initialFormState);
     setPhoto(null);
+  };
+
+  const uploadToStorage = async () => {
+    const resp = await fetch(photo);
+    const file = await resp.blob();
+    const photoId = Date.now().toString();
+    const storageRef = ref(storage, `images/${photoId}`);
+    const uploadPhoto = await uploadBytesResumable(storageRef, file);
+    const photoRef = await getDownloadURL(uploadPhoto.ref);
+    console.log(photoRef);
   };
 
   return (
