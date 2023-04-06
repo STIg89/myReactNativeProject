@@ -4,7 +4,9 @@ import { Text, View, TouchableOpacity, Image, FlatList } from "react-native";
 import { Header } from "../../components/Header/Header";
 import { mainStyles } from "./MainStyles";
 import { db } from "../../firebase/config";
-import { doc, onSnapshot, collection } from "firebase/firestore";
+import { onSnapshot, collection } from "firebase/firestore";
+import { useSelector } from "react-redux";
+import { selectUserProfile } from "../../redux/auth/authSelectors";
 
 const {
   main,
@@ -17,8 +19,11 @@ const {
   photoDetailsEl,
 } = mainStyles;
 
-export const PostsScreen = ({ route, navigation }) => {
+export const PostsScreen = ({ navigation }) => {
   const [posts, setPosts] = useState([]);
+  const { userName, userEmail } = useSelector(selectUserProfile);
+
+  // console.log("posts:", posts);
 
   const getPosts = () => {
     onSnapshot(collection(db, "posts"), (collection) => {
@@ -39,8 +44,8 @@ export const PostsScreen = ({ route, navigation }) => {
             <Image />
           </View>
           <View style={userInfo}>
-            <Text style={userLogin}>Login Loginov</Text>
-            <Text style={userMail}>exs@mail.com</Text>
+            <Text style={userLogin}>{userName}</Text>
+            <Text style={userMail}>{userEmail}</Text>
           </View>
         </View>
         <FlatList
@@ -63,7 +68,9 @@ export const PostsScreen = ({ route, navigation }) => {
               >
                 <TouchableOpacity
                   onPress={() => {
-                    navigation.navigate("Comments");
+                    navigation.navigate("Comments", {
+                      photoUrl: item.photoUrl,
+                    });
                   }}
                   style={photoDetailsEl}
                 >
@@ -76,7 +83,10 @@ export const PostsScreen = ({ route, navigation }) => {
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => {
-                    navigation.navigate("Map", { item });
+                    navigation.navigate("Map", {
+                      latitude: item.latitude,
+                      longitude: item.longitude,
+                    });
                   }}
                   style={photoDetailsEl}
                 >

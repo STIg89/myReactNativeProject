@@ -4,7 +4,8 @@ import MapView, { Marker } from "react-native-maps";
 import { StyleSheet, View } from "react-native";
 
 export const MapScreen = ({ route }) => {
-  const { latitude, longitude } = route.params.item;
+  const { latitude, longitude } = route.params;
+
   return (
     <View>
       <Header title="Карта" />
@@ -12,16 +13,13 @@ export const MapScreen = ({ route }) => {
         <MapView
           style={styles.map}
           initialRegion={{
-            latitude: latitude,
-            longitude: longitude,
+            latitude,
+            longitude,
             latitudeDelta: 0.0922,
             longitudeDelta: 0.0421,
           }}
         >
-          <Marker
-            coordinate={{ latitude: latitude, longitude: longitude }}
-            title="travel photo"
-          />
+          <Marker coordinate={{ latitude, longitude }} title="travel photo" />
         </MapView>
       </View>
     </View>

@@ -15,7 +15,6 @@ export const mainStyles = StyleSheet.create({
     backgroundColor: "#FFF",
     height: "100%",
     display: "flex",
-    paddingBottom: 8,
   },
   main: {
     flex: 1,
@@ -46,6 +45,7 @@ export const mainStyles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
+    marginBottom: "7%",
   },
   userInfo: {},
   userLogin: {
@@ -114,12 +114,16 @@ export const mainStyles = StyleSheet.create({
   },
   trashWrap: {
     position: "absolute",
-    bottom: 34,
+    bottom: 0,
+    paddingVertical: 16,
     alignSelf: "center",
+    backgroundColor: "#FFF",
+    width: "100%",
   },
   trashBtn: {
     justifyContent: "center",
     alignItems: "center",
+    alignSelf: "center",
     width: 70,
     height: 40,
     borderRadius: 20,

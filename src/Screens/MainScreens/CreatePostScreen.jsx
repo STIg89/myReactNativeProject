@@ -135,7 +135,9 @@ export const CreatePostScreen = ({ navigation }) => {
   return (
     <TouchableWithoutFeedback onPress={keyboardHide}>
       <KeyboardAvoidingView behavior={Platform.OS == "ios" && "padding"}>
-        <View style={screenWrap}>
+        <View
+          style={{ ...screenWrap, paddingBottom: isKeyboardShow ? 24 : 64 }}
+        >
           <Header title="Создать публикацию" />
           <ScrollView>
             <View style={main}>
