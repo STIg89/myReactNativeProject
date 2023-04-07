@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   FlatList,
   Text,
+  SafeAreaView,
 } from "react-native";
 import {
   doc,
@@ -92,61 +93,58 @@ export const CommentsScreen = ({ route }) => {
       <KeyboardAvoidingView behavior={Platform.OS == "ios" && "padding"}>
         <View style={screenWrap}>
           <Header title="Комментарии" />
-          {/* <ScrollView> */}
-          <View
-            style={{
-              backgroundColor: "#FFF",
-              paddingHorizontal: "4%",
-              paddingVertical: "7%",
-              display: "flex",
-            }}
-          >
-            <View style={{ marginBottom: 32 }}>
-              <Image source={{ uri: photoUrl }} style={photoWrap} />
+          <ScrollView>
+            <View
+              style={{
+                backgroundColor: "#FFF",
+                paddingHorizontal: "4%",
+                paddingVertical: "7%",
+                display: "flex",
+              }}
+            >
+              <View style={{ marginBottom: 32 }}>
+                <Image source={{ uri: photoUrl }} style={photoWrap} />
+              </View>
+              {allComments.map((item) => {
+                return (
+                  <View
+                    key={item.date}
+                    style={{
+                      display: "flex",
+                      flexDirection:
+                        item.userId === userId ? "row" : "row-reverse",
+                      justifyContent: "space-between",
+                      flexWrap: "nowrap",
+                      width: "100%",
+                    }}
+                  >
+                    <View
+                      style={{
+                        padding: 16,
+                        backgroundColor: "#F6F6F6",
+                        borderRadius: 6,
+                        marginBottom: 16,
+                        flexGrow: 1,
+                        maxWidth: "88%",
+                      }}
+                    >
+                      <Text>{item.comment}</Text>
+                    </View>
+                    <View
+                      style={{
+                        width: 28,
+                        height: 28,
+                        borderRadius: 14,
+                        backgroundColor: "#F6F6F6",
+                      }}
+                    >
+                      <Image />
+                    </View>
+                  </View>
+                );
+              })}
             </View>
-            <FlatList
-              data={allComments}
-              keyExtractor={(item, index) => index}
-              renderItem={({ item }) => (
-                <View
-                  style={{
-                    display: "flex",
-                    flexDirection:
-                      item.userId === userId ? "row" : "row-reverse",
-                    justifyContent: "space-between",
-                    flexWrap: "nowrap",
-                    width: "100%",
-                  }}
-                >
-                  <View
-                    style={{
-                      padding: 16,
-                      backgroundColor: "#F6F6F6",
-                      borderRadius: 6,
-                      marginBottom: 16,
-                      // marginRight: item.userId === userId ? 16 : 0,
-                      // marginLeft: item.userId !== userId ? 16 : 0,
-                      flexGrow: 1,
-                      maxWidth: "88%",
-                    }}
-                  >
-                    <Text>{item.comment}</Text>
-                  </View>
-                  <View
-                    style={{
-                      width: 28,
-                      height: 28,
-                      borderRadius: 14,
-                      backgroundColor: "#F6F6F6",
-                    }}
-                  >
-                    <Image />
-                  </View>
-                </View>
-              )}
-            />
-          </View>
-          {/* </ScrollView> */}
+          </ScrollView>
           <View
             style={{
               position: "absolute",
