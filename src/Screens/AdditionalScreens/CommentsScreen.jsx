@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Image,
   View,
@@ -8,7 +8,20 @@ import {
   KeyboardAvoidingView,
   Keyboard,
   TouchableOpacity,
+  FlatList,
+  Text,
 } from "react-native";
+import {
+  doc,
+  updateDoc,
+  collection,
+  setDoc,
+  onSnapshot,
+} from "firebase/firestore";
+import { db } from "../../firebase/config";
+import { useSelector } from "react-redux";
+import { selectUserProfile } from "../../redux/auth/authSelectors";
+
 import { AntDesign } from "@expo/vector-icons";
 import { mainStyles } from "../MainScreens/MainStyles";
 import { Header } from "../../components/Header/Header";
@@ -25,12 +38,23 @@ const {
   screenWrap,
 } = mainStyles;
 
+const initialCommentData = {
+  userId: "",
+  comment: "",
+  date: "",
+};
+
 export const CommentsScreen = ({ route }) => {
   const [isKeyboardShow, setIsKeyboardShow] = useState(false);
   const [onFocus, setOnFocus] = useState(false);
   const [comment, setComment] = useState("");
-  console.log(comment);
-  const { photoUrl } = route.params;
+  const [allComments, setAllComments] = useState([]);
+  const { userId } = useSelector(selectUserProfile);
+  const { photoUrl, postId } = route.params;
+
+  useEffect(() => {
+    getComments();
+  }, []);
 
   const keyboardHide = () => {
     setIsKeyboardShow(false);
@@ -46,25 +70,83 @@ export const CommentsScreen = ({ route }) => {
     setIsKeyboardShow(false);
   };
 
+  const handleSubmit = async () => {
+    await createComment();
+    setComment("");
+  };
+
+  const createComment = async () => {
+    const commentData = { userId: userId, comment: comment, date: Date.now() };
+    const postRef = doc(db, "posts", `${postId}`);
+    await updateDoc(postRef, { comments: [...allComments, commentData] });
+  };
+
+  const getComments = async () => {
+    onSnapshot(doc(db, "posts", `${postId}`), (doc) => {
+      setAllComments(doc.data().comments);
+    });
+  };
+
   return (
     <TouchableWithoutFeedback onPress={keyboardHide}>
       <KeyboardAvoidingView behavior={Platform.OS == "ios" && "padding"}>
         <View style={screenWrap}>
           <Header title="Комментарии" />
-          <ScrollView>
-            <View
-              style={{
-                backgroundColor: "#FFF",
-                paddingHorizontal: "4%",
-                paddingVertical: "7%",
-                display: "flex",
-              }}
-            >
-              <View style={{ marginBottom: 32 }}>
-                <Image source={{ uri: photoUrl }} style={photoWrap} />
-              </View>
+          {/* <ScrollView> */}
+          <View
+            style={{
+              backgroundColor: "#FFF",
+              paddingHorizontal: "4%",
+              paddingVertical: "7%",
+              display: "flex",
+            }}
+          >
+            <View style={{ marginBottom: 32 }}>
+              <Image source={{ uri: photoUrl }} style={photoWrap} />
             </View>
-          </ScrollView>
+            <FlatList
+              data={allComments}
+              keyExtractor={(item, index) => index}
+              renderItem={({ item }) => (
+                <View
+                  style={{
+                    display: "flex",
+                    flexDirection:
+                      item.userId === userId ? "row" : "row-reverse",
+                    justifyContent: "space-between",
+                    flexWrap: "nowrap",
+                    width: "100%",
+                  }}
+                >
+                  <View
+                    style={{
+                      padding: 16,
+                      backgroundColor: "#F6F6F6",
+                      borderRadius: 6,
+                      marginBottom: 16,
+                      // marginRight: item.userId === userId ? 16 : 0,
+                      // marginLeft: item.userId !== userId ? 16 : 0,
+                      flexGrow: 1,
+                      maxWidth: "88%",
+                    }}
+                  >
+                    <Text>{item.comment}</Text>
+                  </View>
+                  <View
+                    style={{
+                      width: 28,
+                      height: 28,
+                      borderRadius: 14,
+                      backgroundColor: "#F6F6F6",
+                    }}
+                  >
+                    <Image />
+                  </View>
+                </View>
+              )}
+            />
+          </View>
+          {/* </ScrollView> */}
           <View
             style={{
               position: "absolute",
@@ -95,12 +177,16 @@ export const CommentsScreen = ({ route }) => {
             <TouchableOpacity
               style={{
                 position: "absolute",
-                right: 8,
+                justifyContent: "center",
+                alignItems: "center",
+                right: "8%",
+                top: 8,
                 width: 34,
                 height: 34,
                 borderRadius: 17,
                 backgroundColor: "#FF6C00",
               }}
+              onPress={handleSubmit}
             >
               <AntDesign name="arrowup" size={24} color="black" />
             </TouchableOpacity>

@@ -70,6 +70,7 @@ export const PostsScreen = ({ navigation }) => {
                   onPress={() => {
                     navigation.navigate("Comments", {
                       photoUrl: item.photoUrl,
+                      postId: item.id,
                     });
                   }}
                   style={photoDetailsEl}

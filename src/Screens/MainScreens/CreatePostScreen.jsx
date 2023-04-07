@@ -118,6 +118,7 @@ export const CreatePostScreen = ({ navigation }) => {
       longitude,
       userId,
       userName,
+      comments: [],
     };
     await setDoc(doc(db, "posts", `${postId}`), postData);
   };
