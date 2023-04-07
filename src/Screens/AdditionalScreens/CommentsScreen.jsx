@@ -8,17 +8,9 @@ import {
   KeyboardAvoidingView,
   Keyboard,
   TouchableOpacity,
-  FlatList,
   Text,
-  SafeAreaView,
 } from "react-native";
-import {
-  doc,
-  updateDoc,
-  collection,
-  setDoc,
-  onSnapshot,
-} from "firebase/firestore";
+import { doc, updateDoc, onSnapshot } from "firebase/firestore";
 import { db } from "../../firebase/config";
 import { useSelector } from "react-redux";
 import { selectUserProfile } from "../../redux/auth/authSelectors";
@@ -27,26 +19,9 @@ import { AntDesign } from "@expo/vector-icons";
 import { mainStyles } from "../MainScreens/MainStyles";
 import { Header } from "../../components/Header/Header";
 
-const {
-  main,
-  userAva,
-  userInfo,
-  userData,
-  userLogin,
-  userMail,
-  photoWrap,
-  photoDetailsEl,
-  screenWrap,
-} = mainStyles;
-
-const initialCommentData = {
-  userId: "",
-  comment: "",
-  date: "",
-};
+const { photoWrap, screenWrap } = mainStyles;
 
 export const CommentsScreen = ({ route }) => {
-  const [isKeyboardShow, setIsKeyboardShow] = useState(false);
   const [onFocus, setOnFocus] = useState(false);
   const [comment, setComment] = useState("");
   const [allComments, setAllComments] = useState([]);
@@ -56,20 +31,6 @@ export const CommentsScreen = ({ route }) => {
   useEffect(() => {
     getComments();
   }, []);
-
-  const keyboardHide = () => {
-    setIsKeyboardShow(false);
-    Keyboard.dismiss();
-  };
-
-  const handleFocus = () => {
-    setIsKeyboardShow(true), setOnFocus(true);
-  };
-
-  const outFocus = () => {
-    setOnFocus(false);
-    setIsKeyboardShow(false);
-  };
 
   const handleSubmit = async () => {
     await createComment();
@@ -89,7 +50,7 @@ export const CommentsScreen = ({ route }) => {
   };
 
   return (
-    <TouchableWithoutFeedback onPress={keyboardHide}>
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <KeyboardAvoidingView behavior={Platform.OS == "ios" && "padding"}>
         <View style={screenWrap}>
           <Header title="Комментарии" />
@@ -156,8 +117,8 @@ export const CommentsScreen = ({ route }) => {
           >
             <TextInput
               placeholder="Комментировать..."
-              onFocus={() => handleFocus()}
-              onEndEditing={() => outFocus()}
+              onFocus={() => setOnFocus(true)}
+              onEndEditing={() => setOnFocus(false)}
               value={comment}
               onChangeText={setComment}
               style={{
