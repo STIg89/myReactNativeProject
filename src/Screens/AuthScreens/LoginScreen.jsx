@@ -84,7 +84,8 @@ export const LoginScreen = ({ navigation }) => {
               onPress={keyboardHide}
               style={{
                 ...logWrapper,
-                paddingBottom: isKeyboardShow ? 32 : 144,
+                paddingBottom: isKeyboardShow ? 32 : 0,
+                minHeight: isKeyboardShow ? 0 : "70%",
               }}
             >
               <Text style={title}>Войти</Text>

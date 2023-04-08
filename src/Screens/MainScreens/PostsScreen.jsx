@@ -21,7 +21,7 @@ const {
 
 export const PostsScreen = ({ navigation }) => {
   const [posts, setPosts] = useState([]);
-  const { userName, userEmail } = useSelector(selectUserProfile);
+  const { userName, userEmail, userAvatar } = useSelector(selectUserProfile);
 
   // console.log("posts:", posts);
 
@@ -41,7 +41,7 @@ export const PostsScreen = ({ navigation }) => {
       <View style={main}>
         <View style={userData}>
           <View style={userAva}>
-            <Image />
+            <Image source={{ uri: userAvatar }} style={userAva} />
           </View>
           <View style={userInfo}>
             <Text style={userLogin}>{userName}</Text>
