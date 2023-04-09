@@ -5,6 +5,7 @@ import { AntDesign, MaterialIcons } from "@expo/vector-icons";
 import { headerStyles } from "./HeaderStyles";
 import { useNavigation } from "@react-navigation/native";
 import { authLogoutUser } from "../../redux/auth/authOperations";
+
 const { header, headerTitle, backBtn, logOutBtn } = headerStyles;
 
 export const Header = ({ title, navigateFrom }) => {
