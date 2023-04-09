@@ -5,7 +5,7 @@ import { postStyles } from "./PostStyles";
 const { photoWrap, photoDetailsEl, wrap, nameText, btnWrap, comText, locText } =
   postStyles;
 
-export const Post = ({ item, navigation }) => {
+export const Post = ({ item, navigation, navigateFrom }) => {
   return (
     <View style={wrap}>
       <Image source={{ uri: item.photoUrl }} style={photoWrap} />
@@ -14,6 +14,7 @@ export const Post = ({ item, navigation }) => {
         <TouchableOpacity
           onPress={() => {
             navigation.navigate("Comments", {
+              navigateFrom: navigateFrom,
               photoUrl: item.photoUrl,
               postId: item.id,
             });
@@ -37,6 +38,7 @@ export const Post = ({ item, navigation }) => {
         <TouchableOpacity
           onPress={() => {
             navigation.navigate("Map", {
+              navigateFrom: navigateFrom,
               latitude: item.latitude,
               longitude: item.longitude,
             });

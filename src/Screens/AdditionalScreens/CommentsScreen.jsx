@@ -36,7 +36,7 @@ export const CommentsScreen = ({ route }) => {
   const [comment, setComment] = useState("");
   const [allComments, setAllComments] = useState([]);
   const { userId, userAvatar } = useSelector(selectUserProfile);
-  const { photoUrl, postId } = route.params;
+  const { photoUrl, postId, navigateFrom } = route.params;
 
   useEffect(() => {
     getComments();
@@ -67,7 +67,7 @@ export const CommentsScreen = ({ route }) => {
   return (
     <KeyboardAvoidingView behavior={Platform.OS == "ios" && "padding"}>
       <View style={screenWrap}>
-        <Header title="Комментарии" />
+        <Header title="Комментарии" navigateFrom={navigateFrom} />
         <ScrollView>
           <View style={comWrap}>
             <View style={{ marginBottom: 32 }}>

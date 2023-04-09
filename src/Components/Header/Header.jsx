@@ -7,7 +7,7 @@ import { useNavigation } from "@react-navigation/native";
 import { authLogoutUser } from "../../redux/auth/authOperations";
 const { header, headerTitle, backBtn, logOutBtn } = headerStyles;
 
-export const Header = ({ title }) => {
+export const Header = ({ title, navigateFrom }) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   return (
@@ -25,7 +25,7 @@ export const Header = ({ title }) => {
       {title !== "Публикации" && (
         <TouchableOpacity
           style={backBtn}
-          onPress={() => navigation.navigate("Posts")}
+          onPress={() => navigation.navigate(navigateFrom)}
         >
           <AntDesign name="arrowleft" size={24} />
         </TouchableOpacity>

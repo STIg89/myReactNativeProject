@@ -4,11 +4,11 @@ import MapView, { Marker } from "react-native-maps";
 import { StyleSheet, View } from "react-native";
 
 export const MapScreen = ({ route }) => {
-  const { latitude, longitude } = route.params;
+  const { latitude, longitude, navigateFrom } = route.params;
 
   return (
     <View>
-      <Header title="Карта" />
+      <Header title="Карта" navigateFrom={navigateFrom} />
       <View style={styles.container}>
         <MapView
           style={styles.map}

@@ -41,7 +41,7 @@ export const PostsScreen = ({ navigation }) => {
           data={posts}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
-            <Post item={item} navigation={navigation} />
+            <Post item={item} navigateFrom="Posts" navigation={navigation} />
           )}
         />
       </View>

@@ -6,6 +6,7 @@ import { db } from "../../firebase/config";
 import { selectUserProfile } from "../../redux/auth/authSelectors";
 import { mainStyles } from "./MainStyles";
 import { Post } from "../../components/Post/Post";
+
 const { background, avatarWrap, title, profileWrapper } = mainStyles;
 
 export const ProfileScreen = ({ navigation }) => {
@@ -40,7 +41,14 @@ export const ProfileScreen = ({ navigation }) => {
           </View>
           <Text style={title}>{userName}</Text>
           {posts.map((item) => {
-            return <Post key={item.id} item={item} navigation={navigation} />;
+            return (
+              <Post
+                key={item.id}
+                item={item}
+                navigateFrom="Profile"
+                navigation={navigation}
+              />
+            );
           })}
         </View>
       </ScrollView>
