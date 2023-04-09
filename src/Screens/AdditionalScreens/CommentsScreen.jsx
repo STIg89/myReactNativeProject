@@ -37,7 +37,12 @@ export const CommentsScreen = ({ route }) => {
   };
 
   const createComment = async () => {
-    const commentData = { userId: userId, comment: comment, date: Date.now() };
+    const commentData = {
+      userId: userId,
+      comment: comment,
+      date: Date.now(),
+      userAvatar: userAvatar,
+    };
     const postRef = doc(db, "posts", `${postId}`);
     await updateDoc(postRef, { comments: [...allComments, commentData] });
   };
@@ -100,16 +105,15 @@ export const CommentsScreen = ({ route }) => {
                       {format(item.date, "PPpp")}
                     </Text>
                   </View>
-                  <View
+                  <Image
+                    source={{ uri: item.userAvatar }}
                     style={{
                       width: 28,
                       height: 28,
                       borderRadius: 14,
                       backgroundColor: "#F6F6F6",
                     }}
-                  >
-                    <Image />
-                  </View>
+                  />
                 </View>
               );
             })}

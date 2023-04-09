@@ -1,6 +1,4 @@
-import React, { useState, useEffect } from "react";
-import { Camera, CameraType } from "expo-camera";
-import * as MediaLibrary from "expo-media-library";
+import React, { useState } from "react";
 import {
   Text,
   TextInput,
@@ -13,14 +11,13 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
-import { storage } from "../../firebase/config";
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { useDispatch } from "react-redux";
 import { AntDesign } from "@expo/vector-icons";
 import { authStyles } from "./AuthStyles";
 import { SubmitBtn } from "../../components/SubmitBtn/SubmitBtn";
 import Toast from "react-native-root-toast";
 import { authRegistrationUser } from "../../redux/auth/authOperations";
+import { SelfieCamera } from "../../components/Camera/SelfieCamera";
 
 const {
   avatarWrap,
@@ -53,45 +50,13 @@ export const RegistrationScreen = ({ navigation }) => {
   const [isKeyboardShow, setIsKeyboardShow] = useState(false);
   const [onFocus, setOnFocus] = useState(initialFocusState);
   const [formState, setFormState] = useState(initialFormState);
-  const [camera, setCamera] = useState(null);
-  const [photo, setPhoto] = useState(null);
   const [isCameraActive, setIsCameraActive] = useState(false);
   const [isPasswordHidden, setIsPasswordHidden] = useState(true);
 
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    (async () => {
-      await Camera.requestCameraPermissionsAsync();
-      await MediaLibrary.requestPermissionsAsync();
-    })();
-  }, []);
-  useEffect(() => {
-    (async () => {
-      if (photo) {
-        await uploadPhoto();
-      }
-    })();
-  }, [photo]);
-
   const handleAva = () => {
     setIsCameraActive(true);
-  };
-
-  const takePhoto = async () => {
-    const { uri } = await camera.takePictureAsync();
-    setPhoto(uri);
-    setIsCameraActive(false);
-  };
-
-  const uploadPhoto = async () => {
-    const resp = await fetch(photo);
-    const file = await resp.blob();
-    const photoId = Date.now().toString();
-    const storageRef = ref(storage, `avatars/${photoId}`);
-    const uploadPhoto = await uploadBytesResumable(storageRef, file);
-    const photoRef = await getDownloadURL(uploadPhoto.ref);
-    setFormState((prevState) => ({ ...prevState, userAvatar: photoRef }));
   };
 
   const keyboardHide = () => {
@@ -135,7 +100,7 @@ export const RegistrationScreen = ({ navigation }) => {
                 minHeight: isKeyboardShow ? 0 : "80%",
               }}
             >
-              {!photo && (
+              {!formState.userAvatar && (
                 <TouchableOpacity
                   style={avatarWrap}
                   onPress={() => handleAva()}
@@ -148,13 +113,13 @@ export const RegistrationScreen = ({ navigation }) => {
                   />
                 </TouchableOpacity>
               )}
-              {photo && (
+              {formState.userAvatar && (
                 <TouchableOpacity
                   style={avatarWrap}
                   onPress={() => handleAva()}
                 >
                   <Image
-                    source={{ uri: photo }}
+                    source={{ uri: formState.userAvatar }}
                     style={{ ...avatarWrap, top: 0 }}
                   />
                   <AntDesign
@@ -248,44 +213,10 @@ export const RegistrationScreen = ({ navigation }) => {
           </TouchableWithoutFeedback>
         </KeyboardAvoidingView>
         {isCameraActive && (
-          <ImageBackground
-            style={{
-              flex: 1,
-              resizeMode: "cover",
-              position: "absolute",
-              width: "100%",
-              height: "100%",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-            source={require("../../images/photoBG.jpeg")}
-          >
-            <Camera
-              type={CameraType.front}
-              ref={setCamera}
-              style={{
-                width: "95%",
-                height: 350,
-                borderRadius: 20,
-              }}
-            ></Camera>
-            <TouchableOpacity
-              style={{
-                marginTop: 32,
-                backgroundColor: "#FF6C00",
-                width: 64,
-                height: 64,
-                borderRadius: 32,
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-              onPress={() => {
-                takePhoto();
-              }}
-            >
-              <AntDesign name="camera" size={24} color="#BDBDBD" />
-            </TouchableOpacity>
-          </ImageBackground>
+          <SelfieCamera
+            setIsCameraActive={setIsCameraActive}
+            setFormState={setFormState}
+          />
         )}
       </ImageBackground>
     </TouchableWithoutFeedback>

@@ -1,8 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { AntDesign, EvilIcons, FontAwesome } from "@expo/vector-icons";
-import { Camera } from "expo-camera";
-import * as MediaLibrary from "expo-media-library";
-import * as Location from "expo-location";
+import React, { useState } from "react";
+import { EvilIcons, FontAwesome } from "@expo/vector-icons";
 import {
   Text,
   TextInput,
@@ -19,18 +16,16 @@ import { Header } from "../../components/Header/Header";
 import { SubmitBtn } from "../../components/SubmitBtn/SubmitBtn";
 import Toast from "react-native-root-toast";
 import { mainStyles } from "./MainStyles";
-
-import { storage, db } from "../../firebase/config";
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { db } from "../../firebase/config";
 import { doc, setDoc } from "firebase/firestore";
 import { useSelector } from "react-redux";
 import { selectUserProfile } from "../../redux/auth/authSelectors";
+import { MainCamera } from "../../components/Camera/MainCamera";
 
 const {
   screenWrap,
   main,
   photoWrap,
-  cameraBtn,
   photoText,
   createInput,
   createInputIcon,
@@ -42,6 +37,7 @@ const {
 const initialFormState = {
   name: "",
   locationDescription: "",
+  photoUrl: null,
 };
 
 const initialFocusState = {
@@ -53,28 +49,8 @@ export const CreatePostScreen = ({ navigation }) => {
   const [isKeyboardShow, setIsKeyboardShow] = useState(false);
   const [onFocus, setOnFocus] = useState(initialFocusState);
   const [formState, setFormState] = useState(initialFormState);
-  const [camera, setCamera] = useState(null);
-  const [photo, setPhoto] = useState(null);
   const [location, setLocation] = useState(null);
   const { userId, userName } = useSelector(selectUserProfile);
-
-  useEffect(() => {
-    (async () => {
-      await Camera.requestCameraPermissionsAsync();
-      await MediaLibrary.requestPermissionsAsync();
-      await Location.requestForegroundPermissionsAsync();
-      const location = await Location.getCurrentPositionAsync();
-      setLocation({
-        latitude: location.coords.latitude,
-        longitude: location.coords.longitude,
-      });
-    })();
-  }, []);
-
-  const takePhoto = async () => {
-    const { uri } = await camera.takePictureAsync();
-    setPhoto(uri);
-  };
 
   const keyboardHide = () => {
     setIsKeyboardShow(false);
@@ -92,9 +68,9 @@ export const CreatePostScreen = ({ navigation }) => {
   };
 
   const handleSubmit = async () => {
-    const { name, locationDescription } = formState;
+    const { name, locationDescription, photoUrl } = formState;
 
-    if (!name || !locationDescription || !photo) {
+    if (!name || !locationDescription || !photoUrl) {
       Toast.show("Please, fill out the form completely");
       return;
     }
@@ -102,13 +78,11 @@ export const CreatePostScreen = ({ navigation }) => {
     uploadPost();
     navigation.navigate("Posts");
     setFormState(initialFormState);
-    setPhoto(null);
   };
 
   const uploadPost = async () => {
-    const { name, locationDescription } = formState;
+    const { name, locationDescription, photoUrl } = formState;
     const { latitude, longitude } = location;
-    const photoUrl = await uploadPhoto();
     const postId = Date.now().toString();
     const postData = {
       photoUrl,
@@ -123,16 +97,6 @@ export const CreatePostScreen = ({ navigation }) => {
     await setDoc(doc(db, "posts", `${postId}`), postData);
   };
 
-  const uploadPhoto = async () => {
-    const resp = await fetch(photo);
-    const file = await resp.blob();
-    const photoId = Date.now().toString();
-    const storageRef = ref(storage, `images/${photoId}`);
-    const uploadPhoto = await uploadBytesResumable(storageRef, file);
-    const photoRef = await getDownloadURL(uploadPhoto.ref);
-    return photoRef;
-  };
-
   return (
     <TouchableWithoutFeedback onPress={keyboardHide}>
       <KeyboardAvoidingView behavior={Platform.OS == "ios" && "padding"}>
@@ -144,26 +108,32 @@ export const CreatePostScreen = ({ navigation }) => {
             <View style={main}>
               <View style={{ marginBottom: 28 }}>
                 <View>
-                  {!photo && (
-                    <Camera style={photoWrap} ref={setCamera}>
-                      <TouchableOpacity
-                        style={cameraBtn}
-                        onPress={() => {
-                          takePhoto();
-                        }}
-                      >
-                        <AntDesign name="camera" size={24} color="#BDBDBD" />
-                      </TouchableOpacity>
-                    </Camera>
+                  {!formState.photoUrl && (
+                    <MainCamera
+                      setLocation={setLocation}
+                      setFormState={setFormState}
+                    />
                   )}
-                  {photo && (
-                    <TouchableOpacity onPress={() => setPhoto(null)}>
-                      <Image source={{ uri: photo }} style={photoWrap} />
+                  {formState.photoUrl && (
+                    <TouchableOpacity
+                      onPress={() =>
+                        setFormState((prevState) => ({
+                          ...prevState,
+                          photoUrl: null,
+                        }))
+                      }
+                    >
+                      <Image
+                        source={{ uri: formState.photoUrl }}
+                        style={photoWrap}
+                      />
                     </TouchableOpacity>
                   )}
                 </View>
-                {!photo && <Text style={photoText}>Сделайте фото</Text>}
-                {photo && (
+                {!formState.photoUrl && (
+                  <Text style={photoText}>Сделайте фото</Text>
+                )}
+                {formState.photoUrl && (
                   <Text style={photoText}>Нажми на фото, для удаления</Text>
                 )}
               </View>
@@ -232,7 +202,6 @@ export const CreatePostScreen = ({ navigation }) => {
                 style={trashBtn}
                 onPress={() => {
                   setFormState(initialFormState);
-                  setPhoto(null);
                 }}
               >
                 <FontAwesome name="trash-o" size={24} color="#BDBDBD" />

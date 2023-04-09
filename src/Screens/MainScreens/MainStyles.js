@@ -63,6 +63,7 @@ export const mainStyles = StyleSheet.create({
     marginBottom: 32,
   },
   profileWrapper: {
+    marginTop: "40%",
     position: "relative",
     alignItems: "stretch",
     paddingHorizontal: "4%",
@@ -80,16 +81,6 @@ export const mainStyles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 8,
-  },
-  cameraBtn: {
-    width: 60,
-    height: 60,
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#FFF",
-    opacity: 0.3,
-    borderRadius: 30,
   },
   photoText: {
     fontSize: 16,
@@ -128,10 +119,5 @@ export const mainStyles = StyleSheet.create({
     height: 40,
     borderRadius: 20,
     backgroundColor: "#F6F6F6",
-  },
-  photoDetailsEl: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
   },
 });
