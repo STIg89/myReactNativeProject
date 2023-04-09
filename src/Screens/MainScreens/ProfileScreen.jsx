@@ -39,8 +39,8 @@ export const ProfileScreen = ({ navigation }) => {
             />
           </View>
           <Text style={title}>{userName}</Text>
-          {posts.map((item, index) => {
-            return <Post item={item} navigation={navigation} />;
+          {posts.map((item) => {
+            return <Post key={item.id} item={item} navigation={navigation} />;
           })}
         </View>
       </ScrollView>

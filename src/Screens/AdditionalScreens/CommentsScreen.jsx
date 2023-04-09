@@ -7,18 +7,29 @@ import {
   KeyboardAvoidingView,
   TouchableOpacity,
   Text,
+  Platform,
 } from "react-native";
 import { doc, updateDoc, onSnapshot } from "firebase/firestore";
 import { db } from "../../firebase/config";
 import { useSelector } from "react-redux";
 import { selectUserProfile } from "../../redux/auth/authSelectors";
-
 import { AntDesign } from "@expo/vector-icons";
-import { mainStyles } from "../MainScreens/MainStyles";
+import { additionalStyles } from "./AdditionalStyles";
 import { Header } from "../../components/Header/Header";
 import { format } from "date-fns";
 
-const { photoWrap, screenWrap } = mainStyles;
+const {
+  photoWrap,
+  screenWrap,
+  comWrap,
+  comContainer,
+  com,
+  dateText,
+  commentAva,
+  inputWrap,
+  inputBtn,
+  input,
+} = additionalStyles;
 
 export const CommentsScreen = ({ route }) => {
   const [onFocus, setOnFocus] = useState(false);
@@ -58,15 +69,7 @@ export const CommentsScreen = ({ route }) => {
       <View style={screenWrap}>
         <Header title="Комментарии" />
         <ScrollView>
-          <View
-            style={{
-              backgroundColor: "#FFF",
-              paddingHorizontal: "4%",
-              paddingVertical: "7%",
-              display: "flex",
-              marginBottom: 52,
-            }}
-          >
+          <View style={comWrap}>
             <View style={{ marginBottom: 32 }}>
               <Image source={{ uri: photoUrl }} style={photoWrap} />
             </View>
@@ -75,61 +78,22 @@ export const CommentsScreen = ({ route }) => {
                 <View
                   key={item.date}
                   style={{
-                    display: "flex",
+                    ...comContainer,
                     flexDirection:
                       item.userId === userId ? "row" : "row-reverse",
-                    justifyContent: "space-between",
-                    flexWrap: "nowrap",
-                    width: "100%",
                   }}
                 >
-                  <View
-                    style={{
-                      padding: 16,
-                      backgroundColor: "#F6F6F6",
-                      borderRadius: 6,
-                      marginBottom: 16,
-                      flexGrow: 1,
-                      maxWidth: "88%",
-                    }}
-                  >
+                  <View style={com}>
                     <Text style={{ fontSize: 13 }}>{item.comment}</Text>
-                    <Text
-                      style={{
-                        fontSize: 10,
-                        color: "#BDBDBD",
-                        marginTop: 8,
-                        marginLeft: "auto",
-                      }}
-                    >
-                      {format(item.date, "PPpp")}
-                    </Text>
+                    <Text style={dateText}>{format(item.date, "PPpp")}</Text>
                   </View>
-                  <Image
-                    source={{ uri: item.userAvatar }}
-                    style={{
-                      width: 28,
-                      height: 28,
-                      borderRadius: 14,
-                      backgroundColor: "#F6F6F6",
-                    }}
-                  />
+                  <Image source={{ uri: item.userAvatar }} style={commentAva} />
                 </View>
               );
             })}
           </View>
         </ScrollView>
-        <View
-          style={{
-            position: "absolute",
-            display: "flex",
-            alignItems: "center",
-            bottom: 0,
-            paddingVertical: 16,
-            backgroundColor: "#FFF",
-            width: "100%",
-          }}
-        >
+        <View style={inputWrap}>
           <TextInput
             placeholder="Комментировать..."
             onFocus={() => setOnFocus(true)}
@@ -137,32 +101,11 @@ export const CommentsScreen = ({ route }) => {
             value={comment}
             onChangeText={setComment}
             style={{
-              borderWidth: 1,
+              ...input,
               borderColor: onFocus ? "#FF6C00" : "#BDBDBD",
-              fontSize: 16,
-              fontWeight: "500",
-              backgroundColor: "#F6F6F6",
-              height: 50,
-              borderRadius: 25,
-              width: "92%",
-              paddingLeft: 16,
-              paddingRight: 51,
             }}
           />
-          <TouchableOpacity
-            style={{
-              position: "absolute",
-              justifyContent: "center",
-              alignItems: "center",
-              right: "7%",
-              top: 24,
-              width: 34,
-              height: 34,
-              borderRadius: 17,
-              backgroundColor: "#FF6C00",
-            }}
-            onPress={handleSubmit}
-          >
+          <TouchableOpacity style={inputBtn} onPress={handleSubmit}>
             <AntDesign name="arrowup" size={24} color="black" />
           </TouchableOpacity>
         </View>

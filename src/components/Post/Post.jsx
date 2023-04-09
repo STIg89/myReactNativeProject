@@ -7,7 +7,7 @@ const { photoWrap, photoDetailsEl, wrap, nameText, btnWrap, comText, locText } =
 
 export const Post = ({ item, navigation }) => {
   return (
-    <View key={item.id} style={wrap}>
+    <View style={wrap}>
       <Image source={{ uri: item.photoUrl }} style={photoWrap} />
       <Text style={nameText}>{item.name}</Text>
       <View style={btnWrap}>
