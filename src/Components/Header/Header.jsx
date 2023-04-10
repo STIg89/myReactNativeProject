@@ -26,7 +26,7 @@ export const Header = ({ title, navigateFrom }) => {
       {title !== "Публикации" && (
         <TouchableOpacity
           style={backBtn}
-          onPress={() => navigation.navigate(navigateFrom)}
+          onPress={() => navigation.navigate(navigateFrom || "Posts")}
         >
           <AntDesign name="arrowleft" size={24} />
         </TouchableOpacity>

@@ -6,6 +6,7 @@ import {
   Image,
   ScrollView,
   TouchableOpacity,
+  Platform,
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { onSnapshot, collection, where, query } from "firebase/firestore";
@@ -42,7 +43,14 @@ export const ProfileScreen = ({ navigation }) => {
       source={require("../../images/photoBG.jpeg")}
     >
       <ScrollView>
-        <View style={profileWrapper}>
+        <View
+          style={{
+            ...profileWrapper,
+            minHeight:
+              (Platform.OS == "ios" && "80%") ||
+              (Platform.OS == "android" && posts.length < 3 && 800),
+          }}
+        >
           <View style={avatarWrap}>
             <Image
               source={{ uri: userAvatar }}

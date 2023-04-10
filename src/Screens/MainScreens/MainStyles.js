@@ -71,7 +71,6 @@ export const mainStyles = StyleSheet.create({
     backgroundColor: "#fff",
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
-    minHeight: "80%",
   },
   photoWrap: {
     height: 240,
